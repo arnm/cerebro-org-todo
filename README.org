@@ -1,0 +1,17 @@
+
+* cerebro-org-todo
+
+manage org mode todos in [[https://github.com/KELiON/cerebro][cerebro]].
+
+
+* usage
+
+** settings
+
+configure todo file in settings
+
+* development
+
+#+begin_src sh
+yarn start
+#+end_src
