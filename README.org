@@ -6,6 +6,10 @@ manage org mode todos in [[https://github.com/KELiON/cerebro][cerebro]].
 
 * usage
 
+** example
+
+   [[[[./example.gif]]]]
+
 ** settings
 
 configure todo file in settings
