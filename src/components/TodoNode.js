@@ -1,13 +1,12 @@
 import React from 'react';
 import { KeyboardNav, KeyboardNavItem } from 'cerebro-ui';
-import { Text } from 'cerebro-ui/Form';
+import { Text, Wrapper } from 'cerebro-ui/Form';
 
 export default class TodoNode extends React.Component {
 
     constructor(props) {
         super(props);
 
-        console.log(this.props.index);
         console.log(this.props.node);
 
         this.originalNode = this.cloneNode(this.props.node);
@@ -30,20 +29,25 @@ export default class TodoNode extends React.Component {
     }
 
     onNodeUpdate(update) {
+
         Object.keys(update).forEach(k => {
             switch(k) {
                 case 'headline':
                     this.state.updatedNode.headline = update[k];
-                    this.setState({updatedNode: this.cloneNode(this.state.updatedNode)});
                     break;
                 case 'body':
                     this.state.updatedNode.body = update[k];
-                    this.setState({updatedNode: this.cloneNode(this.state.updatedNode)});
                     break;
+                case 'todo': {
+                    this.state.updatedNode.todo = update[k];
+                    break;
+                }
                 default:
                     console.log(`unrecognized node field: ${k}`);
             }
         });
+
+        this.setState({updatedNode: this.cloneNode(this.state.updatedNode)});
     }
 
     onNodeUpdateCancel() {
@@ -53,34 +57,44 @@ export default class TodoNode extends React.Component {
         });
     }
 
-    async onNodeSave() {
-        this.props.onNodeSave(this.props.index, this.state.updatedNode).then(() => {
-            this.originalNode = this.cloneNode(this.state.updatedNode);
-            this.setState({editing: false});
-        });
+    onNodeSave() {
+        this.props.onNodeSave(this.state.updatedNode);
+        this.props.back();
+    }
+
+    onNodeDelete() {
+        this.props.onNodeDelete();
+        this.props.back();
     }
 
     render() {
+        const { updatedNode, editing } = this.state;
+
         const headline = this.state.editing ?
-                         <input type="text"
-                                value={this.state.updatedNode.headline}
-                                onChange={(e) => this.onNodeUpdate.bind(this)({headline: e.target.value})}/> :
-                         <h2>{this.state.updatedNode.headline}</h2>;
+                         <Text
+                             type='text'
+                             label='Headline'
+                             value={updatedNode.headline}
+                             onChange={(headline) => this.onNodeUpdate.bind(this)({headline})}
+                         /> :
+                         <h2>{updatedNode.headline}</h2>;
 
         const body = this.state.editing ?
-                     <textarea onChange={(e) => this.onNodeUpdate.bind(this)({body: e.target.value})}>
-                         {this.state.updatedNode.body}
-                     </textarea> :
-                     <p>{this.state.updatedNode.body}</p>;
+                     <Wrapper label="Body">
+                         <textarea onChange={(e) => this.onNodeUpdate.bind(this)({body: e.target.value})}>
+                             {updatedNode.body}
+                         </textarea>
+                     </Wrapper> :
+                     <p>{updatedNode.body}</p>;
 
         const readOptions = [
-            <KeyboardNavItem>
+            <KeyboardNavItem onSelect={() => this.onNodeUpdate.bind(this)({todo: 'DONE'})}>
                 mark as done
             </KeyboardNavItem>,
             <KeyboardNavItem onSelect={() => this.setState({editing: true})}>
                 edit
             </KeyboardNavItem>,
-            <KeyboardNavItem>
+            <KeyboardNavItem onSelect={this.onNodeDelete.bind(this)}>
                 delete
             </KeyboardNavItem>
         ];
@@ -94,16 +108,16 @@ export default class TodoNode extends React.Component {
             </KeyboardNavItem>
         ];
 
-        const options = this.state.editing ? editingOptions : readOptions;
+        const options = editing ? editingOptions : readOptions;
+        options.push(<KeyboardNavItem onSelect={() => this.props.back()}>back</KeyboardNavItem>);
 
         return (
             <div>
-                {headline}
-                {body}
+                <h5>{updatedNode.todo}</h5>
+                <div>{headline}</div>
+                <div>{body}</div>
                 <KeyboardNav>
-                    <ul>
-                        {options}
-                    </ul>
+                    {options}
                 </KeyboardNav>
             </div>
         );
