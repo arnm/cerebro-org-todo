@@ -3,12 +3,11 @@
 
 manage org mode todos in [[https://github.com/KELiON/cerebro][cerebro]].
 
-
 * usage
 
 ** example
 
-   [[[[./example.gif]]]]
+   [[./example.gif]]
 
 ** settings
 
@@ -17,5 +16,6 @@ configure todo file in settings
 * development
 
 #+begin_src sh
+npm install
 yarn start
 #+end_src
