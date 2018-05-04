@@ -1,21 +1,44 @@
 
 * cerebro-org-todo
 
-manage org mode todos in [[https://github.com/KELiON/cerebro][cerebro]].
+Manage org mode todos in [[https://github.com/KELiON/cerebro][cerebro]].
 
-* usage
+* Installation
 
-** example
+Install "Org Todo" plugin via Cerebro Plugin Manager.
+
+* Usage
+
+** Example
 
    [[./example.gif]]
 
-** settings
+** Settings
 
-configure todo file in settings
+Configure TODO file under "Manage Plugins" in Cerebro.
 
-* development
+* Development
+
+** Install dependencies
+
+#+begin_src sh
+yarn
+#+end_src
+
+or
 
 #+begin_src sh
 npm install
+#+end_src
+
+** Link application
+
+#+begin_src sh
 yarn start
+#+end_src
+
+or
+
+#+begin_src sh
+npm run start
 #+end_src
